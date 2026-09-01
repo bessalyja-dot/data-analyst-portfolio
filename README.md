@@ -1,6 +1,6 @@
 # Портфолио аналитика данных — Александр Бессалый
 
-Сайт: <!-- ссылка на GitHub Pages -->
+Сайт: https://bessalyja-dot.github.io/data-analyst-portfolio/
 
 | Страница | Что внутри |
 |---|---|
@@ -39,4 +39,4 @@ python3 case-retail/analysis.py   # SQL + pandas → output/findings.json
 ## Что осталось заполнить
 
 В `resume.html` и `cover-letter.md` жёлтым подсвечены места под фактические данные:
-опыт работы, образование, конкретный BI-инструмент, город и ссылка на GitHub.
+опыт работы, образование, конкретный BI-инструмент и город.
