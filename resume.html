@@ -27,9 +27,9 @@
     </div>
     <div class="meta">
       <a href="mailto:bessalyja@gmail.com">bessalyja@gmail.com</a>
-      <a class="print-only" href="tel:+70000000000">+7 000 000-00-00</a>
       <a href="https://t.me/Sasha_Bazuka">@Sasha_Bazuka</a>
       <a href="index.html">Портфолио с разборами</a>
+      <span class="print-only" id="private-phone"></span>
       <a href="https://github.com/bessalyja-dot/data-analyst-portfolio">github.com/bessalyja-dot</a>
     </div>
   </div>
@@ -37,7 +37,7 @@
   <section>
     <h2>Кратко</h2>
     <p>Аналитик данных: собираю сырые выгрузки в цифры, на которые можно опереться при решении. Считаю на SQL и Python, довожу результат до дашборда или отчёта, который читает не аналитик. Отдельно проговариваю, чего в данных нет, — чтобы решение не принимали по неполной картине.</p>
-    <p style="margin-top:10px">В аналитике полгода, до этого работал <span class="todo">указать сферу и роль</span>. Опыт в операционном бизнесе помогает быстро понимать, откуда в выгрузке берутся цифры и где в ней врут: один из моих кейсов вырос из реальной инвентаризации, где итог сходился, а учёта не было.</p>
+    <p style="margin-top:10px">В аналитику пришёл из операционного управления баром и занимаюсь ей полгода. Это даёт то, чего не даёт курс: я знаю, как выгрузка появляется на свет — кто и когда вносит списание, почему приход попадает в систему на день позже и откуда в отчёте берётся минус четыре килограмма кофе. Один из моих кейсов вырос ровно из этого: инвентаризация, где итог сходился, а учёта не было.</p>
   </section>
 
   <section>
@@ -109,36 +109,24 @@
   <section>
     <h2>Опыт работы</h2>
     <div class="row">
-      <div class="when"><span class="todo">месяц.год — месяц.год</span></div>
+      <div class="when"><span class="todo">месяц.год</span> — н. в.</div>
       <div>
-        <h3><span class="todo">должность</span></h3>
-        <p class="org"><span class="todo">компания, сфера, город</span></p>
+        <h3>Шеф-бармен, аналитика бара</h3>
+        <p class="org" id="employer">Лаунж-бар, Московская область</p>
         <ul>
-          <li><span class="todo">3–4 пункта: что делал и что из этого получилось. Формула — «сделал X, получилось Y». Цифры добавим, когда пришлёшь</span></li>
+          <li>Отвечаю за учёт бара: инвентаризации, себестоимость, контроль остатков и расхождений</li>
+          <li>Разобрал сличительную ведомость и показал, что итоговая недостача 3,5% скрывает валовое расхождение 20,6% по 79 позициям из 80; нашёл 8 отрицательных учётных остатков и предложил регламент по срокам проведения списаний</li>
+          <li>Разбираю P&amp;L заведения по статьям, свожу выгрузки из учётной системы и готовлю отчётность для управляющего</li>
+          <li>Автоматизировал ежедневный отчёт по смене: Telegram-бот вместо переписки, 6 пользователей</li>
         </ul>
-      </div>
-    </div>
-    <div class="row">
-      <div class="when"><span class="todo">месяц.год — месяц.год</span></div>
-      <div>
-        <h3><span class="todo">должность</span></h3>
-        <p class="org"><span class="todo">компания</span></p>
-        <ul><li><span class="todo">обязанности и результаты</span></li></ul>
       </div>
     </div>
   </section>
 
   <section>
-    <h2>Образование</h2>
+    <h2>Обучение</h2>
     <div class="row">
-      <div class="when"><span class="todo">годы</span></div>
-      <div>
-        <h3><span class="todo">специальность</span></h3>
-        <p class="org"><span class="todo">вуз (РАНХиГС СЗИУ?), закончил или учусь</span></p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="when"><span class="todo">год</span></div>
+      <div class="when">май — декабрь 2025</div>
       <div>
         <h3>Аналитик данных</h3>
         <p class="org">Skillbox, профессиональный курс</p>
@@ -152,6 +140,9 @@
   </footer>
 </div>
 <script src="assets/charts.js"></script>
+<!-- Приватные данные для печатной версии: файла нет в репозитории, на сайте он
+     не загрузится и страница останется обезличенной. См. assets/private.example.js -->
+<script src="assets/private.js" onerror="void 0"></script>
 <script>Charts.themeToggle(document.getElementById("theme"));</script>
 </body>
 </html>

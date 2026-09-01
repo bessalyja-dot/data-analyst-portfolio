@@ -147,5 +147,7 @@ footer{padding:30px 0 44px;color:var(--ink-3);font-size:14px}
 }
 
 /* Телефон — только в печатной версии резюме, не в публичной странице. */
-.print-only{display:none}
-@media print{.print-only{display:block}}
+/* Специфичность важнее каскада: .cv-head .meta a задаёт display:block и без
+   !important перебивает эти правила — телефон утекал на публичную страницу. */
+.print-only{display:none!important}
+@media print{.print-only{display:block!important}.screen-only{display:none!important}}
