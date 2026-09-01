@@ -137,6 +137,7 @@ footer{padding:30px 0 44px;color:var(--ink-3);font-size:14px}
 .skills dt{font-size:14px;color:var(--ink-3)}
 .skills dd{font-size:15px;color:var(--ink-2)}
 @media (max-width:640px){.row,.skills{grid-template-columns:1fr;gap:6px}}
+@media (max-width:820px),print{.cv-head .meta{text-align:left}}
 @media print{
   :root{--plane:#fff;--surface:#fff;--ink:#000;--ink-2:#333;--ink-3:#666;--border:#ddd}
   .top,.theme-btn,footer .noprint{display:none}
@@ -144,3 +145,7 @@ footer{padding:30px 0 44px;color:var(--ink-3);font-size:14px}
   .cv section{padding:14px 0;break-inside:avoid}
   a{color:#000;text-decoration:none}
 }
+
+/* Телефон — только в печатной версии резюме, не в публичной странице. */
+.print-only{display:none}
+@media print{.print-only{display:block}}
