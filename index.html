@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Александр Бессалый — аналитик данных</title>
+<meta name="description" content="Портфолио аналитика данных: SQL, Python, дашборды, финансовые модели, автоматизация отчётности.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <nav>
+      <a href="index.html" aria-current="page">Портфолио</a>
+      <a href="case-retail.html">Кейс: продажи</a>
+      <a href="case-ownblend.html">Кейс: финмодель</a>
+      <a href="resume.html">Резюме</a>
+    </nav>
+    <button class="theme-btn" id="theme">Тёмная</button>
+  </div>
+
+  <section>
+    <p class="kicker">Аналитик данных</p>
+    <h1>Александр Бессалый</h1>
+    <p class="lead">Работаю там, где данные должны превратиться в решение: что закупать, кого удерживать, где теряются деньги. Считаю на SQL и Python, показываю результат так, чтобы его понял не аналитик, и отдельно проговариваю, чему в данных верить нельзя.</p>
+    <div class="contacts">
+      <a href="mailto:bessalyja@gmail.com">bessalyja@gmail.com</a>
+      <a href="https://t.me/Sasha_Bazuka">@Sasha_Bazuka</a>
+      <a href="tel:+70000000000">+7 000 000-00-00</a>
+      <a href="resume.html">Резюме →</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Работы</h2>
+    <p>Три задачи разного типа: анализ большого массива продаж, финансовая модель с проверкой чужих расчётов и автоматизация ручной отчётности.</p>
+
+    <div class="works">
+      <article class="work">
+        <span class="kicker">Кейс 1 · открытые данные · SQL + Python</span>
+        <h3>Продажи онлайн-ритейлера: 1 млн строк за два года</h3>
+        <p class="head">21,7% ассортимента дают 80% выручки, 26% клиентов — 72% денег, а четверть всех возвратов — одна аннулированная сделка, которая ломает любой отчёт, если её не заметить.</p>
+        <p>Полный цикл: скачивание и очистка сырого файла с журналом «что выброшено и почему», расчёты на SQL с оконными функциями, RFM-сегментация, когортный анализ удержания, разбор возвратов и профиля спроса по дням и часам. Отдельным блоком — чего в данных нет и какие выводы поэтому делать нельзя.</p>
+        <div class="facts">
+          <div><b>1 067 371</b><span>строка на входе</span></div>
+          <div><b>74,4%</b><span>прошло очистку</span></div>
+          <div><b>7</b><span>RFM-сегментов</span></div>
+          <div><b>24</b><span>когорты по удержанию</span></div>
+        </div>
+        <div class="stack"><span>SQL / SQLite</span><span>оконные функции</span><span>pandas</span><span>когорты</span><span>RFM</span><span>SVG-графики</span></div>
+        <a class="go" href="case-retail.html">Смотреть разбор →</a>
+      </article>
+
+      <article class="work">
+        <span class="kicker">Кейс 2 · финансовая модель · Python</span>
+        <h3>OWN BLEND: проверка бизнес-плана, который не сходился</h3>
+        <p class="head">Модель повторила чужие расчёты — сошлось 6 из 6. А потом сверила их с реальным прайсом поставщика: сырьё оказалось дороже заложенного в 4–19 раз, и продукт в исходной комплектации давал −681 ₽ с каждой продажи.</p>
+        <p>Юнит-экономика, P&amp;L, точка безубыточности, анализ чувствительности и обратная задача «какая цена нужна, чтобы окупиться за 18 месяцев». Все исходные цифры вынесены в отдельные файлы и помечены как факт или допущение — меняешь одну строку, пересчитывается модель, графики и текст отчёта.</p>
+        <div class="facts">
+          <div><b>6 из 6</b><span>сошлось при сверке</span></div>
+          <div><b>6</b><span>найдено расхождений</span></div>
+          <div><b>−681 ₽</b><span>вклад до пересборки</span></div>
+          <div><b>+894 ₽</b><span>после</span></div>
+        </div>
+        <div class="stack"><span>Python</span><span>юнит-экономика</span><span>P&amp;L</span><span>чувствительность</span><span>сценарии</span><span>автоотчёт .docx</span></div>
+        <a class="go" href="case-ownblend.html">Смотреть разбор →</a>
+      </article>
+
+      <article class="work">
+        <span class="kicker">Кейс 3 · автоматизация · Python</span>
+        <h3>Отчётность, которую больше не собирают руками</h3>
+        <p class="head">Ежедневный отчёт управляющего заведением собирался в переписке и терялся. Заменил его ботом-мастером: менеджер отвечает на вопросы в Telegram, данные приходят в одном формате и в одно время.</p>
+        <p>Telegram-бот на python-telegram-bot: пошаговый сценарий сбора показателей за смену, ограничение доступа по списку менеджеров, напоминание по расписанию, разбор данных на стороне сервера. Второй бот — гостевой, вход по печатному QR с меткой источника, чтобы видеть, откуда пришёл гость.</p>
+        <p class="note">Раздел дополняю: сюда встанет разбор сличительной ведомости по бару — <span class="todo">жду подтверждения, что данные можно показывать в обезличенном виде</span>.</p>
+        <div class="stack"><span>Python</span><span>python-telegram-bot</span><span>APScheduler</span><span>systemd</span><span>Excel</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Инструменты</h2>
+    <div class="works" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+      <article class="work">
+        <h3>Данные</h3>
+        <ul class="clean">
+          <li>SQL: JOIN, агрегации, оконные функции, CTE</li>
+          <li>Python: pandas, numpy, matplotlib</li>
+          <li>Очистка и сверка сырых выгрузок</li>
+          <li>Когорты, RFM, ABC, сезонность</li>
+        </ul>
+      </article>
+      <article class="work">
+        <h3>Показать результат</h3>
+        <ul class="clean">
+          <li>Дашборды и интерактивные отчёты</li>
+          <li><span class="todo">BI: указать — Power BI / DataLens / Tableau</span></li>
+          <li>Excel: сводные, формулы, модели</li>
+          <li>Автогенерация документов и графиков</li>
+        </ul>
+      </article>
+      <article class="work">
+        <h3>Экономика</h3>
+        <ul class="clean">
+          <li>Юнит-экономика и P&amp;L</li>
+          <li>Точка безубыточности, сценарии</li>
+          <li>Анализ чувствительности</li>
+          <li>Себестоимость, наценка, возвраты</li>
+        </ul>
+      </article>
+      <article class="work">
+        <h3>Автоматизация</h3>
+        <ul class="clean">
+          <li>Telegram-боты для сбора данных</li>
+          <li>Скрипты вместо ручных отчётов</li>
+          <li>Развёртывание на сервере, systemd</li>
+          <li>Git, воспроизводимые расчёты</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Как я работаю</h2>
+    <ul class="clean">
+      <li><b>Сначала вопрос, потом график.</b> Отчёт нужен не для красоты, а чтобы кто-то принял решение. Если непонятно, какое, — уточняю до начала работы.</li>
+      <li><b>Проверяю данные, а не доверяю им.</b> Дубли, выбросы, обрезанный период, пропущенные идентификаторы — половина ошибок в отчётах отсюда.</li>
+      <li><b>Говорю, чего в данных нет.</b> Если по выгрузке нельзя посчитать маржу — так и пишу, а не выдаю выручку за прибыль.</li>
+      <li><b>Расчёт воспроизводится.</b> Любую цифру можно получить заново одной командой и посмотреть, из чего она собрана.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Связаться</h2>
+    <p>Открыт к предложениям по позиции аналитика данных. Готов разобрать вашу реальную выгрузку в качестве тестового — так видно работу, а не портфолио.</p>
+    <div class="contacts">
+      <a href="mailto:bessalyja@gmail.com">bessalyja@gmail.com</a>
+      <a href="https://t.me/Sasha_Bazuka">@Sasha_Bazuka</a>
+      <a href="tel:+70000000000">+7 000 000-00-00</a>
+    </div>
+  </section>
+
+  <footer>Александр Бессалый · портфолио аналитика данных · 2026</footer>
+</div>
+<script src="assets/charts.js"></script>
+<script>Charts.themeToggle(document.getElementById("theme"));</script>
+</body>
+</html>

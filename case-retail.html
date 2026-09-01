@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Кейс: продажи онлайн-ритейлера — Александр Бессалый</title>
+<meta name="description" content="Разбор 1 млн строк продаж: очистка, сезонность, ABC, RFM, когорты, возвраты. SQL + Python.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <nav>
+      <a href="index.html">Портфолио</a>
+      <a href="case-retail.html" aria-current="page">Кейс: продажи</a>
+      <a href="resume.html">Резюме</a>
+    </nav>
+    <button class="theme-btn" id="theme">Тёмная</button>
+  </div>
+
+  <section>
+    <p class="kicker">Кейс 1 · открытые данные · SQL + Python</p>
+    <h1>Что на самом деле происходит<br>в продажах онлайн-ритейлера</h1>
+    <p class="lead">Миллион строк заказов за два года. Задача — не «построить графики», а ответить на пять вопросов, от которых зависят деньги: когда закупаться, что держать в ассортименте, кого удерживать, почему возвращают товар и когда работать с клиентом.</p>
+    <dl class="tiles" id="tiles"></dl>
+    <p class="note">Данные: <a href="https://archive.ics.uci.edu/dataset/502/online+retail+ii" target="_blank" rel="noopener">UCI Online Retail II</a> — реальные заказы британского онлайн-магазина подарков, 01.12.2009 – 09.12.2011. Весь расчёт воспроизводится двумя командами, код внизу страницы.</p>
+  </section>
+
+  <section>
+    <h2>1. Сначала — что выбросить</h2>
+    <p>В сыром файле 1 067 371 строка, и часть из них считать нельзя: без идентификатора клиента не построить когорты, служебные строки (доставка, ручные правки, банковские сборы) не товар, а полные дубли завышают выручку. Каждое правило записано в коде и печатается отчётом — цифры ниже не «примерно», а ровно то, что отработало.</p>
+    <div class="card"><div class="scroll"><table id="cleaning">
+      <thead><tr><th>Что убрано</th><th class="n">Строк</th><th class="n">Доля</th></tr></thead>
+      <tbody></tbody>
+    </table></div></div>
+    <div class="takeaway"><p><b>Важно:</b> 243 тысячи строк без <code>customer_id</code> — это 23% данных и почти пятая часть выручки. Их нельзя молча удалить и делать вид, что выручка такая: все выводы про клиентов ниже относятся к тем, кого можно опознать. Такую оговорку стоит держать в любом отчёте — иначе бизнес принимает решение по неполной картине.</p></div>
+  </section>
+
+  <section>
+    <h2>2. Сезонность: год держится на октябре и ноябре</h2>
+    <div class="card">
+      <header><h3>Выручка по месяцам, £</h3><p>Наведите курсор — чеки и клиенты за месяц.</p></header>
+      <div class="chart" id="c-monthly"></div>
+    </div>
+    <div class="takeaway"><p>Два пика — ноябрь 2010 (£1,12 млн) и ноябрь 2011 (£1,11 млн), провал — февраль и апрель. Магазин продаёт подарки оптом, поэтому его «Новый год» наступает в октябре: закупка и найм на пик должны быть готовы к сентябрю, а не к декабрю.</p>
+    <p style="margin-top:8px"><b>Ловушка в данных:</b> декабрь 2011 выглядит обвалом (£338 тыс.), но выгрузка обрывается 9 декабря. Это неполный месяц, а не падение спроса — сравнивать его с другими нельзя.</p></div>
+  </section>
+
+  <section>
+    <h2>3. Ассортимент: пятая часть товаров кормит весь магазин</h2>
+    <div class="card">
+      <header><h3>Накопительная доля выручки по товарам</h3><p>Товары отсортированы по выручке: сколько позиций даёт какую долю денег.</p></header>
+      <div class="chart" id="c-pareto"></div>
+    </div>
+    <div class="card"><div class="scroll"><table id="abc">
+      <thead><tr><th>Класс</th><th class="n">Товаров</th><th class="n">Доля ассортимента</th><th class="n">Доля выручки</th></tr></thead>
+      <tbody></tbody>
+    </table></div></div>
+    <div class="takeaway"><p>1002 позиции из 4622 (21,7%) дают 80% выручки. Класс C — половина ассортимента ради 5% денег: это замороженные в складе деньги и лишняя работа на закупке. Первое, что стоит сделать, — проверить, что в C не попали новинки, которым просто не дали времени.</p></div>
+    <h3 style="margin-top:26px">Топ-10 товаров по выручке</h3>
+    <div class="card"><div class="scroll"><table id="abc-top">
+      <thead><tr><th class="n">#</th><th>Товар</th><th class="n">Выручка, £</th></tr></thead><tbody></tbody>
+    </table></div></div>
+  </section>
+
+  <section>
+    <h2>4. Клиенты: 26% приносят 72% денег</h2>
+    <p>RFM-сегментация: по каждому клиенту считаем давность последней покупки, число чеков и суммарные деньги, разбиваем на пятёрки и сводим в семь групп, с которыми можно работать по-разному.</p>
+    <div class="card">
+      <header><h3>Доля выручки по сегментам</h3><p>Наведите курсор — число клиентов и выручка на клиента.</p></header>
+      <div class="chart" id="c-rfm"></div>
+    </div>
+    <div class="card"><div class="scroll"><table id="rfm">
+      <thead><tr><th>Сегмент</th><th class="n">Клиентов</th><th class="n">Доля выручки</th><th class="n">Выручка на клиента, £</th><th class="n">Дней с покупки</th></tr></thead>
+      <tbody></tbody>
+    </table></div></div>
+    <div class="takeaway"><p>«Чемпионы» — 1558 клиентов из 5894, но 72% выручки и £7,5 тыс. на человека. Отдельно стоит смотреть на «В зоне риска»: их всего 462, они дают 6,2% выручки и уже два-три месяца ничего не покупали. Это самая дешёвая точка приложения усилий — удержать существующего оптовика дешевле, чем найти нового.</p></div>
+  </section>
+
+  <section>
+    <h2>5. Удержание: кто пережил третий месяц, остаётся надолго</h2>
+    <div class="card">
+      <header><h3>Когорты по месяцу первой покупки, % вернувшихся</h3><p>Строка — когорта, столбец — сколько месяцев прошло с первой покупки. Месяц 0 не показан: он всегда 100%.</p></header>
+      <div class="chart scroll" id="c-cohorts"></div>
+    </div>
+    <div class="takeaway"><p>На второй месяц возвращается около 20% когорты, к шестому — 16%, к двенадцатому — 15%. Кривая не падает в ноль, а выходит на полку: клиент либо уходит почти сразу, либо становится постоянным. Значит, бороться надо за первые два месяца — дальше отток сам по себе небольшой.</p></div>
+  </section>
+
+  <section>
+    <h2>6. Возвраты: одна сделка на четверть всех потерь</h2>
+    <div class="card">
+      <header><h3>Доля возвратов в выручке по месяцам</h3></header>
+      <div class="chart" id="c-returns"></div>
+    </div>
+    <div class="card"><div class="scroll"><table id="return-top">
+      <thead><tr><th>Товар</th><th class="n">Возвращено, £</th><th class="n">Доля от продаж позиции</th></tr></thead><tbody></tbody>
+    </table></div></div>
+    <div class="takeaway"><p>Средний уровень возвратов — 4,2% выручки, это нормально. Но £168 470 из £711 490 (23,7% всех возвратов) — одна позиция <span class="mono">PAPER CRAFT, LITTLE BIRDIE</span>, отменённая целиком одним документом. Это не проблема качества товара, а единичная аннулированная сделка. Если её не заметить, любой отчёт про «рост возвратов» будет неверным — поэтому выбросы проверяются до, а не после выводов.</p></div>
+  </section>
+
+  <section>
+    <h2>7. Когда покупают — и что это говорит о бизнесе</h2>
+    <div class="card">
+      <header><h3>Выручка по дням недели и часам, тыс. £</h3></header>
+      <div class="chart scroll" id="c-hours"></div>
+    </div>
+    <div class="takeaway"><p>86% выручки приходит в промежуток с 9 до 16 часов, пик — обеденное время вторника и четверга. По субботам продаж нет вообще: £9,8 тыс. за два года, 0,1%. Это не поведение покупателей, а особенность выгрузки — так выглядит канал, где заказы оформляет закупщик в свой рабочий день.</p>
+    <p style="margin-top:8px">При этом воскресенье даёт 10,3% выручки — списывать выходные целиком нельзя, хотя по субботней дыре так и хочется. Практический вывод: рассылки и звонки ставить на будни до обеда, а гипотезу про воскресенье проверять отдельно.</p></div>
+  </section>
+
+  <section>
+    <h2>Что я бы предложил бизнесу</h2>
+    <ul class="clean">
+      <li>Сдвинуть закупку и найм на пик к сентябрю: на октябрь–декабрь приходится треть годовой выручки (33% в полном 2010 году).</li>
+      <li>Разобрать класс C (2398 позиций, 5% выручки) — вывести из ассортимента то, что не новинки, и освободить оборотные деньги.</li>
+      <li>Сделать регулярный список «В зоне риска» (462 клиента, 6,2% выручки) и передавать его менеджерам до того, как они уйдут окончательно.</li>
+      <li>Держать в отчётности возвраты без учёта разовых аннулированных сделок — иначе один документ перекрывает реальную динамику.</li>
+      <li>Коммуникации — будни, 9–16: в этот промежуток проходит 86% выручки. Проверить A/B-тестом рассылки, а не принимать на веру.</li>
+    </ul>
+    <p class="note">Чего в данных нет и о чём я бы честно предупредил: себестоимости и маржи. Всё выше — про выручку, а не про прибыль. Решения по ассортименту без закупочных цен принимать нельзя.</p>
+  </section>
+
+  <section>
+    <h2>Как это устроено</h2>
+    <p>Никаких ручных шагов: скрипт скачивает файл, чистит, кладёт в SQLite. Расчёты — SQL с оконными функциями, дальше pandas там, где на SQL было бы неудобно. Графики нарисованы на голом SVG, без библиотек.</p>
+<pre>case-retail/
+├── prepare.py     скачивание, очистка, SQLite (правила очистки — здесь)
+├── queries.sql    выручка, ABC с оконной функцией, RFM, когорты, возвраты
+├── analysis.py    сегменты, матрица когорт → output/findings.json
+└── output/        витрина для этой страницы
+
+python3 case-retail/prepare.py
+python3 case-retail/analysis.py</pre>
+    <p class="note">Код целиком — в репозитории, ссылка в шапке портфолио.</p>
+  </section>
+
+  <footer>Александр Бессалый · аналитик данных · <a href="index.html">все работы</a></footer>
+</div>
+
+<script src="case-retail/output/findings.js"></script>
+<script src="assets/charts.js"></script>
+<script>
+const D = window.FINDINGS;
+const nf = (n, d = 0) => n.toLocaleString("ru-RU", { minimumFractionDigits: d, maximumFractionDigits: d });
+const pct = (v, d = 1) => (v * 100).toFixed(d).replace(".", ",") + "%";
+const money = (v) => "£" + nf(v);
+const short = (v) => v >= 1e6 ? "£" + (v / 1e6).toFixed(1).replace(".", ",") + " млн" : "£" + nf(v / 1e3) + " тыс.";
+const MONTHS = ["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
+const mLabel = (m) => MONTHS[+m.slice(5, 7) - 1] + " " + m.slice(2, 4);
+const rows = (id, html) => document.querySelector(`#${id} tbody`).innerHTML = html;
+
+Charts.themeToggle(document.getElementById("theme"));
+
+/* плитки */
+const t = D.totals;
+document.getElementById("tiles").innerHTML = [
+  ["Выручка", short(t.revenue), "за 2 года"],
+  ["Чеков", nf(t.invoices), "средний £" + nf(t.avg_check)],
+  ["Клиентов", nf(t.customers), "с идентификатором"],
+  ["Товарных позиций", nf(t.skus), "в ассортименте"],
+  ["Строк после очистки", nf(D.cleaning.kept), pct(D.cleaning.kept / D.cleaning.raw, 0) + " от сырых"],
+].map(([k, v, s]) => `<div class="tile"><dt>${k}</dt><dd>${v}<small>${s}</small></dd></div>`).join("");
+
+/* очистка */
+rows("cleaning", D.cleaning.dropped.filter(r => r.rows > 0).map(r =>
+  `<tr><td>${r.reason}</td><td class="n">${nf(r.rows)}</td><td class="n">${pct(r.rows / D.cleaning.raw, 1)}</td></tr>`
+).join("") + `<tr><td><b>Осталось для анализа</b></td><td class="n"><b>${nf(D.cleaning.kept)}</b></td><td class="n"><b>${pct(D.cleaning.kept / D.cleaning.raw, 1)}</b></td></tr>`);
+
+/* выручка по месяцам */
+Charts.lineChart(document.getElementById("c-monthly"), {
+  values: D.monthly.map(m => m.revenue),
+  labels: D.monthly.map(m => mLabel(m.month)),
+  yFmt: (v) => v === 0 ? "0" : v >= 1e6 ? (v / 1e6).toFixed(1).replace(".", ",") + " млн" : nf(v / 1e3) + " тыс.",
+  tip: (i) => {
+    const m = D.monthly[i];
+    return `<b>${mLabel(m.month)}</b><br>Выручка ${money(m.revenue)}<br>Чеков ${nf(m.invoices)} · клиентов ${nf(m.customers)}`;
+  },
+});
+
+/* парето */
+Charts.lineChart(document.getElementById("c-pareto"), {
+  values: D.pareto.map(p => p.cum_share * 100),
+  labels: D.pareto.map(p => nf(p.rank)),
+  tickEvery: Math.ceil(D.pareto.length / 8),
+  yFmt: (v) => nf(v) + "%",
+  tip: (i) => `<b>${nf(D.pareto[i].rank)} товаров</b><br>дают ${pct(D.pareto[i].cum_share)} выручки`,
+});
+rows("abc", D.abc.map(r =>
+  `<tr><td><b>${r.class}</b></td><td class="n">${nf(r.skus)}</td><td class="n">${pct(r.sku_share)}</td><td class="n">${pct(r.revenue_share)}</td></tr>`
+).join(""));
+rows("abc-top", D.abc_top.map((r, i) =>
+  `<tr><td class="n">${i + 1}</td><td>${r.description}</td><td class="n">${nf(r.revenue)}</td></tr>`
+).join(""));
+
+/* RFM */
+Charts.barsH(document.getElementById("c-rfm"), {
+  rows: D.rfm.map(r => ({ label: r.segment, value: r.revenue_share * 100, raw: r })),
+  fmt: (v) => v.toFixed(1).replace(".", ",") + "%",
+  tip: (r) => `<b>${r.raw.segment}</b><br>${nf(r.raw.customers)} клиентов · ${money(r.raw.revenue)}<br>на клиента ${money(r.raw.per_customer)} · ${nf(r.raw.recency)} дн. с покупки`,
+});
+rows("rfm", D.rfm.map(r =>
+  `<tr><td>${r.segment}</td><td class="n">${nf(r.customers)}</td><td class="n">${pct(r.revenue_share)}</td><td class="n">${nf(r.per_customer)}</td><td class="n">${nf(r.recency)}</td></tr>`
+).join(""));
+
+/* когорты */
+const co = D.cohorts, W = 12;
+Charts.heatmap(document.getElementById("c-cohorts"), {
+  // столбец +0 — всегда 100% по определению: он ничего не сообщает, но сжимает цветовую шкалу
+  matrix: co.matrix.map(r => r.slice(1, W + 1).map(v => v == null ? null : v * 100)),
+  rowLabels: co.labels.map(mLabel),
+  colLabels: Array.from({ length: W }, (_, i) => "+" + (i + 1)),
+  fmt: (v) => Math.round(v),
+  tip: (i, j, v) => `<b>Когорта ${mLabel(co.labels[i])}</b> · ${nf(co.size[i])} клиентов<br>Месяц +${j + 1}: вернулось ${pct(v / 100)}`,
+});
+
+/* возвраты */
+Charts.lineChart(document.getElementById("c-returns"), {
+  values: D.returns.map(r => r.rate * 100),
+  labels: D.returns.map(r => mLabel(r.month)),
+  yFmt: (v) => nf(v, 1).replace(".", ",") + "%",
+  tip: (i) => {
+    const r = D.returns[i];
+    return `<b>${mLabel(r.month)}</b><br>Возвращено ${money(r.returned)}<br>Продано ${money(r.gross)} · ${pct(r.rate)}`;
+  },
+});
+rows("return-top", D.return_top.map(r =>
+  `<tr><td>${r.description || r.stock_code}</td><td class="n">${nf(r.returned)}</td><td class="n">${pct(r.rate, 0)}</td></tr>`
+).join(""));
+
+/* дни и часы */
+const DAYS = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+const hours = [...new Set(D.weekday_hour.map(r => r.hour))].sort((a, b) => a - b);
+const order = [1, 2, 3, 4, 5, 6, 0];
+const grid = order.map(d => hours.map(h => {
+  const hit = D.weekday_hour.find(r => r.weekday === d && r.hour === h);
+  return hit ? hit.revenue : null;
+}));
+Charts.heatmap(document.getElementById("c-hours"), {
+  matrix: grid,
+  rowLabels: order.map(d => DAYS[d]),
+  colLabels: hours.map(h => h + ":00"),
+  cell: 38, labelW: 44,
+  fmt: (v) => nf(v / 1e3),
+  tip: (i, j, v) => `<b>${DAYS[order[i]]}, ${hours[j]}:00</b><br>${money(v)} за два года`,
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Резюме — Александр Бессалый, аналитик данных</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap cv">
+  <div class="top">
+    <nav>
+      <a href="index.html">Портфолио</a>
+      <a href="case-retail.html">Кейс: продажи</a>
+      <a href="case-ownblend.html">Кейс: финмодель</a>
+      <a href="resume.html" aria-current="page">Резюме</a>
+    </nav>
+    <button class="theme-btn" id="theme">Тёмная</button>
+  </div>
+
+  <div class="cv-head">
+    <div>
+      <h1>Александр Бессалый</h1>
+      <p class="role">Аналитик данных</p>
+      <p class="role" style="font-size:15px"><span class="todo">город, формат работы (офис / удалёнка / гибрид), готовность к переезду</span></p>
+    </div>
+    <div class="meta">
+      <a href="mailto:bessalyja@gmail.com">bessalyja@gmail.com</a>
+      <a href="tel:+70000000000">+7 000 000-00-00</a>
+      <a href="https://t.me/Sasha_Bazuka">@Sasha_Bazuka</a>
+      <a href="index.html">Портфолио с разборами</a>
+      <span class="todo">ссылка на GitHub</span>
+    </div>
+  </div>
+
+  <section>
+    <h2>Кратко</h2>
+    <p>Аналитик данных: собираю сырые выгрузки в цифры, на которые можно опереться при решении. Считаю на SQL и Python, довожу результат до дашборда или отчёта, который читает не аналитик. Отдельно проговариваю, чего в данных нет, — чтобы решение не принимали по неполной картине.</p>
+    <p style="margin-top:10px">До аналитики работал <span class="todo">указать сферу и роль — по опыту в ресторанном бизнесе получается сильная строчка: понимаю, откуда берутся цифры в выгрузке</span>. Это помогает быстро понимать бизнес-смысл данных, а не только их структуру.</p>
+  </section>
+
+  <section>
+    <h2>Навыки</h2>
+    <dl class="skills"><dt>SQL</dt><dd>JOIN, агрегации, CTE, оконные функции; SQLite, <span class="todo">добавить PostgreSQL / ClickHouse, если работал</span></dd></dl>
+    <dl class="skills"><dt>Python</dt><dd>pandas, numpy, matplotlib; очистка и сверка выгрузок, автоматизация отчётов</dd></dl>
+    <dl class="skills"><dt>Визуализация</dt><dd><span class="todo">BI: Power BI / DataLens / Tableau — указать, какой</span>; дашборды, интерактивные отчёты</dd></dl>
+    <dl class="skills"><dt>Методы</dt><dd>когортный анализ, RFM-сегментация, ABC, сезонность, юнит-экономика, P&amp;L, анализ чувствительности</dd></dl>
+    <dl class="skills"><dt>Excel</dt><dd>сводные таблицы, формулы, финансовые модели, сверка остатков</dd></dl>
+    <dl class="skills"><dt>Прочее</dt><dd>Git, Telegram-боты для сбора данных, развёртывание скриптов на сервере</dd></dl>
+  </section>
+
+  <section>
+    <h2>Проекты</h2>
+    <div class="row">
+      <div class="when">2026</div>
+      <div>
+        <h3>Анализ продаж онлайн-ритейлера — 1 млн строк</h3>
+        <p class="org">Открытые данные · SQL, Python · <a href="case-retail.html">разбор</a></p>
+        <ul>
+          <li>Очистка сырой выгрузки с журналом правил: из 1 067 371 строки к анализу допущено 74,4%, каждое исключение обосновано</li>
+          <li>ABC-анализ на оконных функциях: 21,7% ассортимента даёт 80% выручки</li>
+          <li>RFM-сегментация 5 894 клиентов: 26% приносят 72% денег; выделен сегмент «в зоне риска» под удержание</li>
+          <li>Когортный анализ удержания по 24 когортам и разбор возвратов: четверть их объёма — одна аннулированная сделка</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="when">2026</div>
+      <div>
+        <h3>OWN BLEND — финансовая модель и аудит бизнес-плана</h3>
+        <p class="org">Python · <a href="case-ownblend.html">разбор</a></p>
+        <ul>
+          <li>Воспроизвёл готовый расчёт: сошлось 6 из 6 контрольных величин</li>
+          <li>Сверил с реальным прайсом поставщика и нашёл 6 расхождений; главное — сырьё дороже заложенного в 4–19 раз</li>
+          <li>Показал отрицательную юнит-экономику (−681 ₽ с продажи) и пересобрал продукт до вклада +894 ₽</li>
+          <li>Обратная задача и анализ чувствительности: минимальная цена 3 106 ₽, главный рычаг — граммовка, а не упаковка</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="when"><span class="todo">период</span></div>
+      <div>
+        <h3>Автоматизация ежедневной отчётности заведения</h3>
+        <p class="org">Python, python-telegram-bot</p>
+        <ul>
+          <li>Заменил сбор отчёта в переписке ботом-мастером: менеджер отвечает на вопросы, данные приходят в одном формате</li>
+          <li>Доступ по списку менеджеров, напоминание по расписанию, разбор ответов на сервере</li>
+          <li><span class="todo">добавить результат в цифрах: сколько времени экономит, сколько заведений/менеджеров пользуются</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Опыт работы</h2>
+    <div class="row">
+      <div class="when"><span class="todo">месяц.год — месяц.год</span></div>
+      <div>
+        <h3><span class="todo">должность</span></h3>
+        <p class="org"><span class="todo">компания, сфера, город</span></p>
+        <ul>
+          <li><span class="todo">3–4 пункта: что делал и что из этого получилось. Формула — «сделал X, получилось Y». Цифры добавим, когда пришлёшь</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="when"><span class="todo">месяц.год — месяц.год</span></div>
+      <div>
+        <h3><span class="todo">должность</span></h3>
+        <p class="org"><span class="todo">компания</span></p>
+        <ul><li><span class="todo">обязанности и результаты</span></li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Образование</h2>
+    <div class="row">
+      <div class="when"><span class="todo">годы</span></div>
+      <div>
+        <h3><span class="todo">специальность</span></h3>
+        <p class="org"><span class="todo">вуз (РАНХиГС СЗИУ?), закончил или учусь</span></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="when"><span class="todo">год</span></div>
+      <div>
+        <h3><span class="todo">курсы по аналитике, если проходил</span></h3>
+        <p class="org"><span class="todo">Практикум / Karpov / Stepik — название и дата</span></p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Резюме обновлено: сентябрь 2026 · <a href="index.html">портфолио с разборами кейсов</a>
+    <p class="note noprint">Печать в PDF: Cmd+P → «Сохранить как PDF». Жёлтым подсвечены места, которые нужно заполнить, — в готовой версии их не остаётся.</p>
+  </footer>
+</div>
+<script src="assets/charts.js"></script>
+<script>Charts.themeToggle(document.getElementById("theme"));</script>
+</body>
+</html>
